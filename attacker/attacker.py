@@ -40,11 +40,13 @@ def log_credentials(username, password):
 def check_credentials(client_data):
     # Take a block of client data and search for username/password credentials.
     # If found, log the credentials to the system by calling log_credentials().
-    regex = r'username=(\S+)\s*&\s*password=(\S+)(\r\n|\r|\n)?'
+    regex = r'username=\'?([^\s\\\'\"]+)\'?\s*&\s*password=\'?([^\s\\\'\"]+)\'?(\r\n|\r|\n)?'
     # Match regex over multiple lines.
     matches = re.findall(regex, client_data, re.M)
     for match in matches:
         log_credentials(match[0], match[1])
+        DEBUG and print(
+            f'{bcolors.WARNING}username={match[0]}, password={match[1]}{bcolors.ENDC}')
 
 
 def handle_tcp_forwarding(client_socket, client_ip, hostname):
